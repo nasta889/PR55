@@ -1,0 +1,38 @@
+public class FiniteAutomaton {
+    private enum State {
+        S0, // Початковий стан
+        S1, // T
+        S2, // TE
+        S3, // TES
+        F   // TEST (кінцевий стан)
+    }
+
+    private State currentState;
+
+    public FiniteAutomaton() {
+        this.currentState = State.S0; // Ініціалізація початкового стану
+    }
+
+    public State process(String input) {
+        for (char c : input.toCharArray()) {
+            switch (currentState) {
+                case S0:
+                    currentState = (c == 'T') ? State.S1 : State.S0;
+                    break;
+                case S1:
+                    currentState = (c == 'E') ? State.S2 : (c == 'T' ? State.S1 : State.S0);
+                    break;
+                case S2:
+                    currentState = (c == 'S') ? State.S3 : (c == 'T' ? State.S1 : State.S0);
+                    break;
+                case S3:
+                    currentState = (c == 'T') ? State.S1 : (c == 'T' ? State.S1 : State.S0);
+                    break;
+                default:
+                    currentState = State.F;
+                    break;
+            }
+        }
+        return currentState;
+    }
+}
